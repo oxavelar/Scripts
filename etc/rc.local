@@ -1,0 +1,49 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+# Simple scheduler for the SSD
+echo deadline > /sys/block/sda/queue/scheduler
+echo 1 > /sys/block/sda/queue/iosched/fifo_batch
+
+# IO Tweaking
+for i in $(ls -d /sys/block/sd?);
+do
+echo 32 > $i/queue/nr_requests
+echo 8192 > $i/queue/read_ahead_kb
+echo 0 > $i/queue/iostats
+done
+
+# Using zRAM now, this machine has a powerful CPU
+MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
+ZRAM_FACTOR=100
+CPU_NUM=$(grep -c processor /proc/cpuinfo)
+
+modprobe zram num_devices=$CPU_NUM
+for i in $(seq 0 $((CPU_NUM - 1)));
+do
+echo $((MEM_SIZE_KB * 1024 / CPU_NUM * ZRAM_FACTOR / 100)) > /sys/block/zram$i/disksize
+mkswap /dev/zram$i
+swapon -p 60 /dev/zram$i
+done
+
+# Enabling KSM
+echo 1 > /sys/kernel/mm/ksm/run
+echo 200 > /sys/kernel/mm/ksm/sleep_millisecs
+
+# Transparent Huge Pages
+echo always > /sys/kernel/mm/transparent_hugepage/enabled
+echo madvise > /sys/kernel/mm/transparent_hugepage/defrag
+echo 0 > /sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs
+echo 40000 > /sys/kernel/mm/transparent_hugepage/khugepaged/scan_sleep_millisecs 
+
+exit 0
