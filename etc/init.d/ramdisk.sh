@@ -8,8 +8,11 @@
 # Short-Description: Using ccache in /var/tmp, this preloads it.
 ### END INIT INFO
 
+# Prioritizing rsync's IO
+ionice -c2 -n0 -p $$
+
 RAMDISK_PATH="/var/tmp/ccache/"
-HDISK_PATH="/home/visitor/.ccache/"
+PERDISK_PATH="/home/visitor/.ccache/"
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -23,17 +26,17 @@ case "$1" in
   start)
     log_success_msg "Filling files from disk to ramdrive"
     mkdir $RAMDISK_PATH > /dev/null 2>&1
-    rsync -a $HDISK_PATH $RAMDISK_PATH
+    rsync -a $PERDISK_PATH $RAMDISK_PATH
     log_action_msg "Ramdisk synched from original backup"
     ;;
   sync)
     log_success_msg "Synching files from ramdisk to disk"
-    rsync -a --delete --recursive --force $RAMDISK_PATH $HDISK_PATH
+    rsync -a --delete --recursive --force $RAMDISK_PATH $PERDISK_PATH
     log_action_msg "Ramdisk synched to drive"
     ;;
   stop)
     log_success_msg "Synching logfiles from ramdisk to disk"
-    rsync -a --delete --recursive --force $RAMDISK_PATH $HDISK_PATH
+    rsync -a --delete --recursive --force $RAMDISK_PATH $PERDISK_PATH
     log_action_msg "Backing up ramdisk contents to drive"
     ;;
   *)
