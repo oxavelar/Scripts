@@ -1,8 +1,8 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          /etc/init.d/ramdisk.sh
-# Required-Start:    $syslog
-# Required-Stop:     $syslog
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Using ccache in /var/tmp, this preloads it.
@@ -11,8 +11,8 @@
 #                    disk usage.
 ### END INIT INFO
 
-# Prioritizing rsync's IO
-ionice -c2 -n0 -p $$
+# Prioritizing rsync's IO & CPU resources
+ionice -c2 -n7 -p $$
 
 RAMDISK_PATH="/var/tmp/ccache/"
 PERDISK_PATH="/home/visitor/.ccache/"
@@ -42,7 +42,8 @@ case "$1" in
   stop)
     log_success_msg "Synching logfiles from ramdisk to disk"
     #rsync -a --delete --recursive --force $RAMDISK_PATH $PERDISK_PATH
-    tar -I pigz -cf $PERDISK_PATH/ccache.tar.pz $RAMDISK_PATH
+    tar -I pigz -cf $PERDISK_PATH/ccache.tar.pz.tmp $RAMDISK_PATH
+    mv -f $PERDISK_PATH/ccache.tar.pz.tmp $PERDISK_PATH/ccache.tar.pz
     log_action_msg "Backing up ramdisk contents to drive"
     ;;
   *)
