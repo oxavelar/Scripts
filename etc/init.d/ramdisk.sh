@@ -6,6 +6,9 @@
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Using ccache in /var/tmp, this preloads it.
+#                    Files are stored with pigz because of the
+#                    multiprocess nature of pigz and to do less
+#                    disk usage.
 ### END INIT INFO
 
 # Prioritizing rsync's IO
@@ -26,17 +29,20 @@ case "$1" in
   start)
     log_success_msg "Filling files from disk to ramdrive"
     mkdir $RAMDISK_PATH > /dev/null 2>&1
-    rsync -a $PERDISK_PATH $RAMDISK_PATH
+    #rsync -a $PERDISK_PATH $RAMDISK_PATH
+    tar -I pigz -xf $PERDISK_PATH/ccache.tar.pz -C /
     log_action_msg "Ramdisk synched from original backup"
     ;;
   sync)
     log_success_msg "Synching files from ramdisk to disk"
-    rsync -a --delete --recursive --force $RAMDISK_PATH $PERDISK_PATH
+    #rsync -a --delete --recursive --force $RAMDISK_PATH $PERDISK_PATH
+    tar -I pigz -cf $PERDISK_PATH/ccache.tar.pz $RAMDISK_PATH
     log_action_msg "Ramdisk synched to drive"
     ;;
   stop)
     log_success_msg "Synching logfiles from ramdisk to disk"
-    rsync -a --delete --recursive --force $RAMDISK_PATH $PERDISK_PATH
+    #rsync -a --delete --recursive --force $RAMDISK_PATH $PERDISK_PATH
+    tar -I pigz -cf $PERDISK_PATH/ccache.tar.pz $RAMDISK_PATH
     log_action_msg "Backing up ramdisk contents to drive"
     ;;
   *)
