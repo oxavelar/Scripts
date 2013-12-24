@@ -1,9 +1,22 @@
 #!/bin/bash
 
-# Install Google Chrome & Google Music
-wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-echo -e "deb http://dl.google.com/linux/chrome/deb/ stable main
-deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google.list
+# Install Google Chrome & Google Music : Now in Contrib
+# wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+# echo -e "deb http://dl.google.com/linux/chrome/deb/ stable main
+# deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google.list
+
+# sudo vim /etc/apt/sources.list
+#
+# deb http://ftp.us.debian.org/debian/ testing main contrib non-free
+# deb-src http://ftp.us.debian.org/debian/ testing main contrib non-free
+#
+# deb http://security.debian.org/ testing/updates main
+# deb-src http://security.debian.org/ testing/updates main
+#
+# deb http://ftp.us.debian.org/debian/ testing-updates main
+# deb-src http://ftp.us.debian.org/debian/ testing-updates main
+#
+# deb http://www.deb-multimedia.org testing main non-free
 
 sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp
 sudo aptitude keep-all

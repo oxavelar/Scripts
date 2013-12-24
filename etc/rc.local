@@ -38,12 +38,12 @@ done
 
 # Enabling KSM
 echo 1 > /sys/kernel/mm/ksm/run
-echo 200 > /sys/kernel/mm/ksm/sleep_millisecs
+echo 800 > /sys/kernel/mm/ksm/sleep_millisecs
 
 # Transparent Huge Pages
 echo always > /sys/kernel/mm/transparent_hugepage/enabled
-echo madvise > /sys/kernel/mm/transparent_hugepage/defrag
+echo always > /sys/kernel/mm/transparent_hugepage/defrag
 echo 0 > /sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs
-echo 40000 > /sys/kernel/mm/transparent_hugepage/khugepaged/scan_sleep_millisecs 
+echo 4000 > /sys/kernel/mm/transparent_hugepage/khugepaged/scan_sleep_millisecs 
 
 exit 0
