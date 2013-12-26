@@ -18,12 +18,13 @@
 #
 # deb http://www.deb-multimedia.org testing main non-free
 
-sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp
-sudo aptitude keep-all
+sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp gnome-games tomboy mutt
+sudo apt-get autoremove
+#sudo aptitude keep-all
 
 # Installing some common applications I use
 sudo apt-get update
-sudo apt-get install unrar p7zip wireshark vim xscreensaver-gl-extra vlc banshee pidgin inkscape gimp rsync google-chrome-beta git
+sudo apt-get install unrar p7zip pigz wireshark vim gnome-vim vlc banshee pidgin inkscape gimp rsync google-chrome-beta git
 
 # NFS sharing drives
 sudo apt-get install nfs-common nfs-kernel-server

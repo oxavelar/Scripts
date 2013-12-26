@@ -5,8 +5,8 @@ sudo echo "Custom tweak script for Debian Linux - by Omar X. Avelar"
 
 # Use the same themes and similar settings
 # for the root user
-sudo ln -s ~/.themes /root/.themes
-sudo ln -s ~/.icons /root/.icons
+sudo ln -sf ~/.themes /root/.themes
+sudo ln -sf ~/.icons /root/.icons
 sudo ln -sf ~/.vimrc /root/.vimrc
 sudo ln -sf ~/.viminfo /root/.viminfo
 sudo ln -sf ~/.pythonrc /root/.pythonrc
