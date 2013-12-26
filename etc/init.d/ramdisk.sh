@@ -14,8 +14,8 @@
 # Prioritizing rsync's IO & CPU resources
 ionice -c2 -n7 -p $$
 
-RAMDISK_PATH="/var/tmp/ccache/"
-PERDISK_PATH="/home/visitor/.ccache/"
+RAMDISK_PATH="/var/tmp/ccache"
+PERDISK_PATH="/home/user/.ccache"
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -27,7 +27,7 @@ PERDISK_PATH="/home/visitor/.ccache/"
 
 case "$1" in
   start)
-    log_success_msg "Filling files from disk to ramdrive"
+    log_success_msg "Filling files from disk to ramdisk"
     mkdir $RAMDISK_PATH > /dev/null 2>&1
     #rsync -a $PERDISK_PATH $RAMDISK_PATH
     tar -I pigz -xf $PERDISK_PATH/ccache.tar.pz -C /
