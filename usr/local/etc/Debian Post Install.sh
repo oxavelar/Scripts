@@ -18,7 +18,7 @@
 #
 # deb http://www.deb-multimedia.org testing main non-free
 
-sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp gnome-games tomboy mutt
+sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp gnome-games tomboy mutt pidgin ppp sound-juicer transmission-* simple-scan
 sudo apt-get autoremove
 #sudo aptitude keep-all
 
