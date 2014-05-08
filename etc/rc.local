@@ -14,7 +14,7 @@
 cpufreq-set -g conservative
 
 # Better TCP Congestion Control
-echo westwood > /proc/sys/net/ipv4/tcp_congestion_control
+echo bic > /proc/sys/net/ipv4/tcp_congestion_control
 
 # Simple scheduler for the SSD
 echo deadline > /sys/block/sda/queue/scheduler
@@ -23,8 +23,8 @@ echo 1 > /sys/block/sda/queue/iosched/fifo_batch
 # IO Tweaking
 for i in $(ls -d /sys/block/sd?);
 do
-echo 4 > $i/queue/nr_requests
-echo 4 > $i/queue/read_ahead_kb
+echo 8 > $i/queue/nr_requests
+echo 512 > $i/queue/read_ahead_kb
 echo 0 > $i/queue/iostats
 done
 
