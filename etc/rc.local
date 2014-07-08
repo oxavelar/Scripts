@@ -11,8 +11,6 @@
 #
 # By default this script does nothing.
 
-cpufreq-set -g conservative
-
 # Better TCP Congestion Control
 echo bic > /proc/sys/net/ipv4/tcp_congestion_control
 
@@ -23,13 +21,10 @@ echo 1 > /sys/block/sda/queue/iosched/fifo_batch
 # IO Tweaking
 for i in $(ls -d /sys/block/sd?);
 do
-echo 8 > $i/queue/nr_requests
-echo 512 > $i/queue/read_ahead_kb
+echo 64 > $i/queue/nr_requests
+echo 128 > $i/queue/read_ahead_kb
 echo 0 > $i/queue/iostats
 done
-
-# Preventing buffer bloat
-ifconfig eth0 txqueuelen 2
 
 # Using zRAM now, this machine has a powerful CPU
 MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
