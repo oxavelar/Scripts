@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Install Google Chrome & Google Music : Now in Contrib
-# wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-# echo -e "deb http://dl.google.com/linux/chrome/deb/ stable main
-# deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google.list
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+echo -e "deb http://dl.google.com/linux/chrome/deb/ stable main
+deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google.list
 
 # sudo vim /etc/apt/sources.list
 #
@@ -24,7 +24,7 @@ sudo apt-get autoremove
 
 # Installing some common applications I use
 sudo apt-get update
-sudo apt-get install unrar p7zip pigz wireshark vim gnome-vim vlc banshee pidgin inkscape gimp rsync google-chrome-beta git
+sudo apt-get install unrar p7zip pigz wireshark vim vim-gnome vlc banshee pidgin inkscape gimp rsync google-chrome-beta git transmission-gtk
 
 # NFS sharing drives
 sudo apt-get install nfs-common nfs-kernel-server

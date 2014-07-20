@@ -1,0 +1,10 @@
+deb http://ftp.us.debian.org/debian/ stable main contrib non-free
+deb-src http://ftp.us.debian.org/debian/ stable main contrib non-free
+
+deb http://security.debian.org/ stable/updates main
+deb-src http://security.debian.org/ stable/updates main
+
+deb http://ftp.us.debian.org/debian/ stable-updates main
+deb-src http://ftp.us.debian.org/debian/ stable-updates main
+
+deb http://www.deb-multimedia.org stable main non-free
