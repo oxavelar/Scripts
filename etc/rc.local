@@ -21,9 +21,9 @@ echo 1 > /sys/block/sda/queue/iosched/fifo_batch
 # IO Tweaking
 for i in $(ls -d /sys/block/sd?);
 do
-echo 32 > $i/queue/nr_requests
-echo 64 > $i/queue/read_ahead_kb
-echo 0 > $i/queue/iostats
+echo  32 > $i/queue/nr_requests
+echo 512 > $i/queue/read_ahead_kb
+echo   0 > $i/queue/iostats
 done
 
 # Using zRAM now, this machine has a powerful CPU

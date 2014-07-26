@@ -3,6 +3,9 @@
 addgroup omar sudo
 sudo echo "Custom tweak script for Debian Linux - by Omar X. Avelar"
 
+# Add our user to sudoers
+su -c "usermod -a -G sudo $USER"
+
 # Defines root password
 sudo passwd root
 
