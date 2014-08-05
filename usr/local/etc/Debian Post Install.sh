@@ -18,7 +18,7 @@ deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/ap
 #
 # deb http://www.deb-multimedia.org testing main non-free
 
-sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp gnome-games tomboy mutt pidgin ppp sound-juicer transmission-* simple-scan && sudo aptitude keep-all && sudo apt-get autoremove
+sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp gnome-games tomboy mutt pidgin ppp sound-juicer transmission-* simple-scan avahi-daemon bluez && sudo aptitude keep-all && sudo apt-get autoremove
 
 # Installing some common applications I use
 sudo apt-get update

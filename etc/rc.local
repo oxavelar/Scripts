@@ -14,6 +14,9 @@
 # Better TCP Congestion Control
 echo bic > /proc/sys/net/ipv4/tcp_congestion_control
 
+# Enable eth0 jumbo frames
+ifconfig eth0 mtu 9000 txqueuelen 1000 up
+
 # Simple scheduler for the SSD
 echo deadline > /sys/block/sda/queue/scheduler
 echo 1 > /sys/block/sda/queue/iosched/fifo_batch
