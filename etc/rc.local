@@ -11,11 +11,9 @@
 #
 # By default this script does nothing.
 
-# Better TCP Congestion Control
-echo bic > /proc/sys/net/ipv4/tcp_congestion_control
-
 # Enable eth0 jumbo frames
 ifconfig eth0 mtu 9000 txqueuelen 1000 up
+ifconfig eth0 down && ifconfig eth0 up
 
 # Simple scheduler for the SSD
 echo deadline > /sys/block/sda/queue/scheduler
@@ -24,10 +22,18 @@ echo 1 > /sys/block/sda/queue/iosched/fifo_batch
 # IO Tweaking
 for i in $(ls -d /sys/block/sd?);
 do
-echo  32 > $i/queue/nr_requests
-echo 512 > $i/queue/read_ahead_kb
-echo   0 > $i/queue/iostats
+echo  256 > $i/queue/nr_requests
+echo 8192 > $i/queue/read_ahead_kb
+echo    0 > $i/queue/iostats
 done
+
+# Enabling Kernel Same-page Sharing
+echo  8000 > /sys/kernel/mm/ksm/pages_to_scan
+echo 20000 > /sys/kernel/mm/ksm/sleep_millisecs
+echo     1 > /sys/kernel/mm/ksm/run
+
+# Enabling Transparent Hugepage Support
+echo always > /sys/kernel/mm/transparent_hugepage/enabled
 
 # Using zRAM now, this machine has a powerful CPU
 MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
