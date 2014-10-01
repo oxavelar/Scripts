@@ -18,11 +18,13 @@ deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/ap
 #
 # deb http://www.deb-multimedia.org testing main non-free
 
-sudo apt-get purge rhythmbox iceweasel ekiga icedtea-* gnome-ppp gnome-games tomboy mutt pidgin ppp sound-juicer transmission-* simple-scan avahi-daemon bluez && sudo aptitude keep-all && sudo apt-get autoremove
+# Minimal Gnome
+sudo apt-get purge gnome-games rhythmbox* evolution* empathy* iceweasel* ekiga* gnome-ppp tomboy mutt ppp sound-juicer simple-scan avahi-daemon bluez xboard quadrapassel four-in-a-row swell-foop lightsoff tali iagno && sudo apt-get install gnome-core && sudo apt-get autoremove
+#&& sudo aptitude keep-all && sudo apt-get autoremove
 
 # Installing some common applications I use
 sudo apt-get update
-sudo apt-get install unrar p7zip pigz wireshark vim vim-gnome vlc banshee pidgin inkscape gimp rsync google-chrome-beta git transmission-gtk
+sudo apt-get install unrar p7zip pigz wireshark vim vim-gnome vlc banshee pidgin inkscape gimp rsync google-chrome-beta git transmission-gtk gedit-source-code-browser-plugin zip
 
 # NFS sharing drives
 sudo apt-get install nfs-common nfs-kernel-server

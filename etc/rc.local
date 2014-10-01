@@ -11,24 +11,25 @@
 #
 # By default this script does nothing.
 
+sleep 10s
+
 # Enable eth0 jumbo frames
-ifconfig eth0 down && ifconfig eth0 mtu 9000 txqueuelen 1000 up
+ifconfig eth0 mtu 9000 txqueuelen 1000 up
 
 # Simple scheduler for the SSD
 echo deadline > /sys/block/sda/queue/scheduler
-echo 1 > /sys/block/sda/queue/iosched/fifo_batch
 
 # IO Tweaking
 for i in $(ls -d /sys/block/sd?);
 do
-echo  256 > $i/queue/nr_requests
-echo 3072 > $i/queue/read_ahead_kb
-echo    0 > $i/queue/iostats
+  echo  256 > $i/queue/nr_requests
+  echo 3072 > $i/queue/read_ahead_kb
+  echo    0 > $i/queue/iostats
 done
 
 # Enabling Kernel Same-page Sharing
-echo  512 > /sys/kernel/mm/ksm/pages_to_scan
-echo 5000 > /sys/kernel/mm/ksm/sleep_millisecs
+echo 4096 > /sys/kernel/mm/ksm/pages_to_scan
+echo 1000 > /sys/kernel/mm/ksm/sleep_millisecs
 echo    1 > /sys/kernel/mm/ksm/run
 
 # Enabling Transparent Hugepage Support
@@ -39,13 +40,12 @@ MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
 ZRAM_FACTOR=100
 CPU_NUM=$(grep -c processor /proc/cpuinfo)
 
-sleep 20s
 modprobe zram num_devices=$CPU_NUM
 for i in $(seq 0 $((CPU_NUM - 1)));
 do
-echo $((MEM_SIZE_KB * 1024 / CPU_NUM * ZRAM_FACTOR / 100)) > /sys/block/zram$i/disksize
-mkswap /dev/zram$i
-swapon -p 5 /dev/zram$i
+  echo $((MEM_SIZE_KB * 1024 / CPU_NUM * ZRAM_FACTOR / 100)) > /sys/block/zram$i/disksize
+  mkswap /dev/zram$i
+  swapon -p 5 /dev/zram$i
 done
 
 exit 0
