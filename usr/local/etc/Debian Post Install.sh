@@ -24,7 +24,7 @@ sudo apt-get purge gnome-games rhythmbox* evolution* empathy* iceweasel* ekiga* 
 
 # Installing some common applications I use
 sudo apt-get update
-sudo apt-get install unrar p7zip pigz wireshark vim vim-gnome vlc banshee pidgin inkscape gimp rsync google-chrome-beta git transmission-gtk gedit-source-code-browser-plugin zip
+sudo apt-get install unrar p7zip pigz wireshark vim vim-gnome vlc banshee pidgin inkscape gimp rsync google-chrome-beta git transmission-gtk gedit-source-code-browser-plugin zip bash-completion
 
 # NFS sharing drives
 sudo apt-get install nfs-common nfs-kernel-server
