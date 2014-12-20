@@ -32,9 +32,9 @@ echo   1 > /sys/kernel/mm/ksm/run
 # Enabling Transparent Hugepage Support
 echo always > /sys/kernel/mm/transparent_hugepage/enabled
 
-# Using zRAM now, this machine has a powerful CPU
-MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
+# Using 100% as zRAM now, this machine has a powerful CPU
 ZRAM_FACTOR=100
+MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
 CPU_NUM=$(grep -c processor /proc/cpuinfo)
 
 modprobe zram num_devices=$CPU_NUM
