@@ -21,9 +21,9 @@ NET_BDF=$(grep r8169 /proc/bus/pci/devices | cut -c0-4)
 setpci -v -s ${NET_BDF:0:2}:${NET_BDF:2:2} e6.b=2e
 
 # Enabling Kernel Same-page Sharing
-echo 256 > /sys/kernel/mm/ksm/pages_to_scan
-echo 500 > /sys/kernel/mm/ksm/sleep_millisecs
-echo   1 > /sys/kernel/mm/ksm/run
+echo 2048 > /sys/kernel/mm/ksm/pages_to_scan
+echo 5000 > /sys/kernel/mm/ksm/sleep_millisecs
+echo    1 > /sys/kernel/mm/ksm/run
 
 # Enabling Transparent Hugepage Support
 echo always > /sys/kernel/mm/transparent_hugepage/enabled
@@ -36,7 +36,7 @@ CPU_NUM=$(grep -c processor /proc/cpuinfo)
 modprobe zram num_devices=$CPU_NUM
 for i in $(seq 0 $((CPU_NUM - 1)));
 do
-  echo $((MEM_SIZE_KB * 1024 / CPU_NUM * ZRAM_FACTOR / 100)) > /sys/block/zram$i/disksize
+  echo $((ZRAM_FACTOR * MEM_SIZE_KB * 1024 / CPU_NUM / 100)) > /sys/block/zram$i/disksize
   mkswap /dev/zram$i
   swapon -p 5 /dev/zram$i
 done
