@@ -22,7 +22,7 @@ setpci -v -s ${NET_BDF:0:2}:${NET_BDF:2:2} e6.b=2e
 
 # Enabling Kernel Same-page Sharing
 echo 2048 > /sys/kernel/mm/ksm/pages_to_scan
-echo 5000 > /sys/kernel/mm/ksm/sleep_millisecs
+echo 8000 > /sys/kernel/mm/ksm/sleep_millisecs
 echo    1 > /sys/kernel/mm/ksm/run
 
 # Enabling Transparent Hugepage Support
