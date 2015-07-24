@@ -19,7 +19,7 @@ deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/ap
 # deb http://www.deb-multimedia.org testing main non-free
 
 # Minimal Gnome
-sudo apt-get purge gnome-games rhythmbox* evolution* empathy* iceweasel* ekiga* gnome-ppp tomboy mutt ppp sound-juicer simple-scan avahi-daemon bluez xboard quadrapassel four-in-a-row swell-foop lightsoff tali iagno && sudo apt-get install gnome-core && sudo apt-get autoremove
+sudo apt-get purge gnome-games rhythmbox* empathy* ekiga* gnome-ppp tomboy mutt ppp sound-juicer simple-scan xboard quadrapassel four-in-a-row swell-foop lightsoff tali iagno && sudo apt-get install gnome-core && sudo apt-get autoremove
 #&& sudo aptitude keep-all && sudo apt-get autoremove
 
 # Installing some common applications I use
