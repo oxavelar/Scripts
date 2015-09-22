@@ -26,6 +26,9 @@ sudo apt-get purge gnome-games rhythmbox* empathy* ekiga* gnome-ppp tomboy mutt 
 sudo apt-get update
 sudo apt-get install unrar p7zip pigz wireshark vim vim-syntastic vlc banshee pidgin inkscape gimp rsync google-chrome-beta git transmission-gtk gedit-source-code-browser-plugin zip bash-completion
 
+# Make vim default text editor
+sudo update-alternatives --config editor
+
 # NFS sharing drives
 sudo apt-get install nfs-common nfs-kernel-server
 echo -e "
