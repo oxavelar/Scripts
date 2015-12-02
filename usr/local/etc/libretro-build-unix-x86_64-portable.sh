@@ -46,6 +46,7 @@ cp -r "$LIBRETRO_PATH/retroarch/media/shaders_cg" "$OUT_DIR/shaders/"
 
 # Cleanup left-overs
 rm -rf "$OUT_DIR/usr"
+find "$OUT_DIR" -type d -name ".git" -exec rm -rf \{\} \;
 
 sync
 
