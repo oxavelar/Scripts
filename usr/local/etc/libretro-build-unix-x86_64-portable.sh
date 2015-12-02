@@ -4,7 +4,14 @@
 # retro in a portable Unix way.
 
 CURR_DIR=$(realpath ${0%/*})
-OUT_DIR="$CURR_DIR/dist/out/"
+LIBRETRO_REPO="https://github.com/libretro/libretro-super"
+LIBRETRO_PATH="$CURR_DIR/$(basename $LIBRETRO_REPO)/"
+OUT_DIR="$LIBRETRO_PATH/dist/out/"
+
+# Make sure we have libretro super and get inside
+cd $CURR_DIR
+git clone $LIBRETRO_REPO
+cd "$LIBRETRO_PATH"
 
 # x86_64 optimizations
 export RARCHCFLAGS="${RARCHCFLAGS} --enable-sse --enable-sse2 --enable-cg --enable-libxml2"
@@ -14,9 +21,11 @@ git pull && cd retroarch && git pull && cd ..
 
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
-$CURR_DIR/libretro-fetch.sh
-$CURR_DIR/retroarch-build.sh
-$CURR_DIR/libretro-build.sh
+
+# Update and build
+$LIBRETRO_PATH/retroarch-build.sh
+$LIBRETRO_PATH/libretro-fetch.sh
+$LIBRETRO_PATH/libretro-build.sh
 
 cd retroarch && make DESTDIR=$OUT_DIR install && cd ..
 ./libretro-install.sh $OUT_DIR
