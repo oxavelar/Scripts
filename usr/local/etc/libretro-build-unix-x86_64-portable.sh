@@ -6,7 +6,7 @@
 CURR_DIR=$(realpath ${0%/*})
 LIBRETRO_REPO="https://github.com/libretro/libretro-super"
 LIBRETRO_PATH="$CURR_DIR/$(basename $LIBRETRO_REPO)/"
-OUT_DIR="$LIBRETRO_PATH/out/"
+OUT_DIR="$CURR_DIR/libretro-portable-out/"
 
 # Make sure we have libretro super and get inside
 cd $CURR_DIR
@@ -26,11 +26,11 @@ export RARCHCFLAGS="${RARCHCFLAGS} --enable-sse --enable-sse2 --enable-cg --enab
 # Build retroarch
 $LIBRETRO_PATH/retroarch-build.sh
 cd $LIBRETRO_PATH/retroarch && make DESTDIR=$OUT_DIR install && cd ..
-$LIBRETRO_PATH/libretro-install.sh $OUT_DIR
 
 # Build libretro cores
 $LIBRETRO_PATH/libretro-fetch.sh
 $LIBRETRO_PATH/libretro-build.sh
+$LIBRETRO_PATH/libretro-install.sh $OUT_DIR
 
 # Organize our files in a portable structure
 mkdir -p "$OUT_DIR/cores-info"
