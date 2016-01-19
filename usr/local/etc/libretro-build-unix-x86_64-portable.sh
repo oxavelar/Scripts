@@ -12,8 +12,8 @@ OUT_DIR="$CURR_DIR/retroarch/"
 cd $CURR_DIR
 git clone $LIBRETRO_REPO
 # Update the packages
-cd "$LIBRETRO_PATH" && git pull
-cd $LIBRETRO_PATH/retroarch && git pull && 
+cd "$LIBRETRO_PATH" && git gc && git pull
+cd $LIBRETRO_PATH/retroarch && git gc && git pull
 
 
 cd $LIBRETRO_PATH
