@@ -14,7 +14,7 @@
 sleep 10s
 
 # Enable PCIe MMRBC to 4k reads to our network controller
-NET_BDF=$(grep r8169 /proc/bus/pci/devices | cut -c0-4)
+NET_BDF=$(grep r8169 /proc/bus/pci/devices | cut -c1-4)
 setpci -v -s ${NET_BDF:0:2}:${NET_BDF:2:2} e6.b=2e
 
 # Enabling Kernel Same-page Sharing
@@ -25,7 +25,7 @@ echo    1 > /sys/kernel/mm/ksm/run
 # Enabling Transparent Hugepage Support
 echo always > /sys/kernel/mm/transparent_hugepage/enabled
 
-# Using 20% as zRAM now, this machine has a powerful CPU
+# Using 50% as zRAM now, this machine has a powerful CPU
 ZRAM_FACTOR=20
 MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
 CPU_NUM=$(grep -c processor /proc/cpuinfo)
