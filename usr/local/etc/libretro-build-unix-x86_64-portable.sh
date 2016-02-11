@@ -2,6 +2,11 @@
 #
 # This script is used in order to build libretro-super
 # retro in a portable Unix way.
+#
+# Requirements:
+# sudo apt-get install nvidia-cg-dev libusb-dev libv4l-dev libopenvg1-mesa libopenal-dev libxml2-dev libudev-dev
+#
+
 
 CURR_DIR=$(realpath ${0%/*})
 LIBRETRO_REPO="https://github.com/libretro/libretro-super"
