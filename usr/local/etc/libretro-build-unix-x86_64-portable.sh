@@ -31,8 +31,8 @@ mkdir -p $(realpath "$OUT_DIR")
 # Build retroarch
 cd "$LIBRETRO_PATH/retroarch"
 # x86_64 optimizations
-./configure --enable-sse --enable-cg --enable-libxml2 --disable-ffmpeg --disable-x11 --disable-sdl2 --disable-sdl --disable-kms --disable-xvideo --disable-x11 --disable-egl
-"$LIBRETRO_PATH/retroarch-build.sh"
+./configure --enable-sse --enable-opengl --enable-cg --enable-libxml2 --disable-ffmpeg -disable-sdl2 --disable-sdl --disable-kms --disable-cheevos
+make -j8 clobber && time make -f Makefile -j8
 make DESTDIR="$OUT_DIR/tmp" install
 cd ..
 
