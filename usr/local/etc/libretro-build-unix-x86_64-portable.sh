@@ -13,6 +13,9 @@ LIBRETRO_REPO="https://github.com/libretro/libretro-super"
 LIBRETRO_PATH="$CURR_DIR/$(basename $LIBRETRO_REPO)/"
 OUT_DIR="$CURR_DIR/retroarch/"
 
+export LIBRETRO_DEVELOPER=0
+export DEBUG=0
+
 # Make sure we have libretro super and get inside
 cd $CURR_DIR
 git clone $LIBRETRO_REPO
@@ -25,12 +28,13 @@ cd "$LIBRETRO_PATH"
 rm -rf $(realpath "$OUT_DIR")
 mkdir -p $(realpath "$OUT_DIR")
 
-# x86_64 optimizations
-export RARCHCFLAGS="${RARCHCFLAGS} --enable-sse --enable-sse2 --enable-cg --enable-libxml2"
-
 # Build retroarch
+cd "$LIBRETRO_PATH/retroarch"
+# x86_64 optimizations
+./configure --enable-sse --enable-cg --enable-libxml2 --disable-ffmpeg --disable-x11 --disable-sdl2 --disable-sdl --disable-kms --disable-xvideo --disable-x11 --disable-egl
 "$LIBRETRO_PATH/retroarch-build.sh"
-cd "$LIBRETRO_PATH/retroarch" && make DESTDIR="$OUT_DIR/tmp" install && cd ..
+make DESTDIR="$OUT_DIR/tmp" install
+cd ..
 
 # Build libretro cores
 "$LIBRETRO_PATH/libretro-fetch.sh"
