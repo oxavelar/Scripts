@@ -15,6 +15,9 @@ OUT_DIR="$CURR_DIR/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
+export CFLAGS="-O2 -ftree-vectorize -msse -msse2 -mssse3 -flto -march=nehalem -mtune=nehalem -pipe"
+export CXXFLAGS="$CFLAGS"
+export ASFLAGS="$CFLAGS"
 
 # Make sure we have libretro super and get inside
 cd $CURR_DIR
@@ -30,9 +33,10 @@ mkdir -p $(realpath "$OUT_DIR")
 
 # Build retroarch
 cd "$LIBRETRO_PATH/retroarch"
+make -j8 clean
 # x86_64 optimizations
-./configure --enable-sse --enable-opengl --enable-cg --enable-libxml2 --disable-ffmpeg -disable-sdl2 --disable-sdl --disable-kms --disable-cheevos
-make -j8 clobber && time make -f Makefile -j8
+./configure --enable-sse --enable-opengl --enable-cg --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-vg --disable-gles --disable-fbo || exit -127
+time make -f Makefile -j8 || exit -99
 make DESTDIR="$OUT_DIR/tmp" install
 cd ..
 
