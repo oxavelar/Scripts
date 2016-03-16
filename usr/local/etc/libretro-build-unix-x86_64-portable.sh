@@ -15,7 +15,7 @@ OUT_DIR="$CURR_DIR/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
-export CFLAGS="-O2 -ftree-vectorize -msse -msse2 -mssse3 -flto -march=nehalem -mtune=nehalem -pipe"
+export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -march=nehalem -mtune=nehalem -fomit-frame-pointer -flto -pipe"
 export CXXFLAGS="$CFLAGS"
 export ASFLAGS="$CFLAGS"
 
@@ -35,7 +35,7 @@ mkdir -p $(realpath "$OUT_DIR")
 cd "$LIBRETRO_PATH/retroarch"
 make -j8 clean
 # x86_64 optimizations
-./configure --enable-sse --enable-opengl --enable-cg --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-vg --disable-gles --disable-fbo || exit -127
+./configure --enable-sse --enable-opengl --enable-cg --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos || exit -127
 time make -f Makefile -j8 || exit -99
 make DESTDIR="$OUT_DIR/tmp" install
 cd ..
