@@ -42,7 +42,9 @@ function build_retroarch()
     cd "$LIBRETRO_PATH/retroarch"
     make -j32 clean
     # x86_64 optimizations
-    ./configure --enable-sse --enable-opengl --enable-cg --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos || exit -127
+    #./configure --help
+    #exit 0
+    ./configure --enable-sse --enable-opengl --enable-gles3 --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer || exit -127
     time make -f Makefile -j16 || exit -99
     make DESTDIR="$OUT_DIR/tmp" install
     cd ..
