@@ -26,8 +26,8 @@ function prerequisites()
     cd $CURR_DIR
     git clone $LIBRETRO_REPO
     # Update the packages
-    cd "$LIBRETRO_PATH" && git gc && git clean -f && git pull
-    cd $LIBRETRO_PATH/retroarch && git gc && git clean -f && git pull
+    cd "$LIBRETRO_PATH" && git gc && git clean -dfx && git reset --hard && git pull
+    cd $LIBRETRO_PATH/retroarch && git gc && git clean -dfx && git reset --hard && git pull
 
     cd "$LIBRETRO_PATH"
     rm -rf $(realpath "$OUT_DIR")
