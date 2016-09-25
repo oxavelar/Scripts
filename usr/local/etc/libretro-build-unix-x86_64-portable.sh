@@ -43,7 +43,7 @@ function build_retroarch()
     make -j32 clean
     # x86_64 optimizations
     #./configure --help || exit 0
-    ./configure --enable-sse --enable-opengl --enable-opengles3 --enable-vulkan --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-libretrodb || exit -127
+    ./configure --enable-sse --enable-opengl --enable-vulkan --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-libretrodb || exit -127
     time make -f Makefile -j16 || exit -99
     make DESTDIR="$OUT_DIR/tmp" install
     cd ..
@@ -62,6 +62,7 @@ function install_libretro()
     mkdir -p "$OUT_DIR/bin" "$OUT_DIR/cores-info" "$OUT_DIR/cores-info" "$OUT_DIR/cores" "$OUT_DIR/shaders" "$OUT_DIR/lib" "$OUT_DIR/autoconf/" "$OUT_DIR/downloads/" "$OUT_DIR/system/" "$OUT_DIR/screenshots/" "$OUT_DIR/assets/" "$OUT_DIR/overlay/" "$OUT_DIR/saves/" "$OUT_DIR/roms/" "$OUT_DIR/remap/" "$OUT_DIR/cheats/"
     cp -av "$OUT_DIR/tmp/usr/local/bin/." "$OUT_DIR/bin"
     cp -av "$OUT_DIR/tmp/etc/." "$OUT_DIR/config"
+    cp -av "$OUT_DIR/tmp/usr/local/share/retroarch/assets" "$OUT_DIR/config"
     mv -vf "$OUT_DIR/config/retroarch.cfg" "$OUT_DIR/config/retroarch.cfg.bak"
     find "$OUT_DIR" -name "*.info" -exec mv -f \{\} "$OUT_DIR/cores-info/" 2> /dev/null \;
     find "$OUT_DIR" -name "*.so" -exec mv -f \{\} "$OUT_DIR/cores/" 2> /dev/null \;
