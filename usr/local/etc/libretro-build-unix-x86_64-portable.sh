@@ -15,7 +15,7 @@ OUT_DIR="$CURR_DIR/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
-export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -ftree-vectorize -march=core2 -mtune=broadwell -fomit-frame-pointer -flto -pipe"
+export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -fgcse -fgcse-after-reload -foptimize-register-move -fipa-cp-clone -fmodulo-sched -fmodulo-sched-allow-regmoves -march=corei7 -mtune=broadwell -fomit-frame-pointer -flto -pipe"
 export CXXFLAGS="$CFLAGS"
 export ASFLAGS="$CFLAGS"
 
