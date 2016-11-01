@@ -15,10 +15,11 @@ OUT_DIR="$CURR_DIR/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
-export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -fgcse -fgcse-after-reload -foptimize-register-move -fipa-cp-clone -fmodulo-sched -fmodulo-sched-allow-regmoves -march=corei7 -mtune=broadwell -fomit-frame-pointer -flto -pipe"
+export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-after-reload -foptimize-register-move -fipa-cp-clone -fmodulo-sched -fmodulo-sched-allow-regmoves -march=corei7 -mtune=broadwell -fomit-frame-pointer -flto=jobserver -pipe"
+export CFLAGS="$CFLAGS -fgraphite-identity -floop-interchange -floop-strip-mine -floop-block -ftree-loop-linear"
 export CXXFLAGS="$CFLAGS"
 export ASFLAGS="$CFLAGS"
-export LDFLAGS="-O1 -flto --hash-style=gnu --as-needed"
+export LDFLAGS="-Wl,-O1 -Wl,-flto -Wl,--hash-style=gnu -Wl,--as-needed"
 
 
 function prerequisites()
