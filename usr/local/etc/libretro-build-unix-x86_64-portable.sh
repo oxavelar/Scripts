@@ -18,6 +18,7 @@ export DEBUG=0
 export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -fgcse -fgcse-after-reload -foptimize-register-move -fipa-cp-clone -fmodulo-sched -fmodulo-sched-allow-regmoves -march=corei7 -mtune=broadwell -fomit-frame-pointer -flto -pipe"
 export CXXFLAGS="$CFLAGS"
 export ASFLAGS="$CFLAGS"
+export LDFLAGS="-O1 -flto --hash-style=gnu --as-needed"
 
 
 function prerequisites()
