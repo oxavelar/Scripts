@@ -15,8 +15,8 @@ OUT_DIR="$CURR_DIR/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
-export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-after-reload -foptimize-register-move -fipa-cp-clone -fmodulo-sched -fmodulo-sched-allow-regmoves -march=corei7 -mtune=broadwell -fomit-frame-pointer -flto=jobserver -pipe"
-export CFLAGS="$CFLAGS -fgraphite-identity -floop-interchange -floop-strip-mine -floop-block -ftree-loop-linear"
+export CFLAGS="-O2 -msse -msse2 -msse3 -mssse3 -mmmx -m3dnow -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-sm -fgcse-las -fivopts -foptimize-register-move -fipa-cp-clone -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves -march=corei7 -mtune=broadwell -fomit-frame-pointer -flto=jobserver -pipe"
+export CFLAGS="$CFLAGS -fgraphite -fgraphite-identity -floop-block -floop-interchange -floop-nest-optimize -floop-strip-mine"
 export CXXFLAGS="$CFLAGS"
 export ASFLAGS="$CFLAGS"
 export LDFLAGS="-Wl,-O1 -Wl,-flto -Wl,--hash-style=gnu -Wl,--as-needed"
@@ -61,7 +61,7 @@ function install_libretro()
     "$LIBRETRO_PATH/libretro-install.sh" "$OUT_DIR"
 
     # Organize our files in a portable structure
-    mkdir -p "$OUT_DIR/bin" "$OUT_DIR/cores-info" "$OUT_DIR/cores-info" "$OUT_DIR/cores" "$OUT_DIR/shaders" "$OUT_DIR/lib" "$OUT_DIR/autoconfig/" "$OUT_DIR/downloads/" "$OUT_DIR/system/" "$OUT_DIR/screenshots/" "$OUT_DIR/assets/" "$OUT_DIR/overlays/" "$OUT_DIR/saves/" "$OUT_DIR/roms/" "$OUT_DIR/remap/" "$OUT_DIR/cheats/"
+    mkdir -p "$OUT_DIR/bin" "$OUT_DIR/cores-info" "$OUT_DIR/cores-info" "$OUT_DIR/cores" "$OUT_DIR/shaders" "$OUT_DIR/lib" "$OUT_DIR/autoconfig/" "$OUT_DIR/downloads/" "$OUT_DIR/system/" "$OUT_DIR/screenshots/" "$OUT_DIR/assets/" "$OUT_DIR/overlays/" "$OUT_DIR/saves/" "$OUT_DIR/roms/" "$OUT_DIR/remap/" "$OUT_DIR/database/"
     cp -av "$OUT_DIR/tmp/usr/local/bin/." "$OUT_DIR/bin"
     cp -av "$OUT_DIR/tmp/etc/." "$OUT_DIR/config"
     cp -av "$OUT_DIR/tmp/usr/local/share/retroarch/assets/." "$OUT_DIR/assets"
@@ -72,7 +72,7 @@ function install_libretro()
     # Moving prebuilts
     cp -av "$LIBRETRO_PATH/retroarch/media/shaders_cg" "$OUT_DIR/shaders"
     cp -av "$LIBRETRO_PATH/retroarch/media/autoconfig" "$OUT_DIR/autoconfig/joypad"
-    cp -av "$LIBRETRO_PATH/retroarch/media/libretrodb/cht/." "$OUT_DIR/cheats"
+    cp -av "$LIBRETRO_PATH/retroarch/media/libretrodb/." "$OUT_DIR/database"
 
     # Cleanup left-overs and any .git files for distribution
     rm -rf "$OUT_DIR/tmp"
