@@ -87,6 +87,10 @@ function extras_libretro()
     # Convert shaders
     "$LIBRETRO_PATH/retroarch/tools/cg2glsl.py" "$OUT_DIR/shaders/shaders_cg" "$OUT_DIR/shaders/shaders_glsl"
     
+    # Strip out debug symbols from the shared libraries and main binary
+    strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note "$OUT_DIR/cores/*.*o"
+    strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note "$OUT_DIR/bin/retroarch"
+
     # Zip for distribution
     zip -rq "$OUT_DIR/retroarch-x86_64.zip" "$OUT_DIR"
 }
