@@ -15,7 +15,7 @@ OUT_DIR="$CURR_DIR/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
-export CFLAGS="-O3 -msse -msse2 -msse3 -mssse3 -mmmx -m3dnow -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-sm -fgcse-las -fivopts -foptimize-register-move -fipa-cp-clone -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves -march=corei7 -mtune=broadwell -fomit-frame-pointer -flto=jobserver -pipe"
+export CFLAGS="-O3 -mavx -mavx2 -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-sm -fgcse-las -fivopts -foptimize-register-move -fipa-cp-clone -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves -march=broadwell -mtune=broadwell -fomit-frame-pointer -flto=jobserver -pipe"
 export CFLAGS="$CFLAGS -fgraphite -fgraphite-identity -floop-block -floop-interchange -floop-nest-optimize -floop-strip-mine"
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="$CFLAGS"
@@ -88,8 +88,8 @@ function extras_libretro()
     "$LIBRETRO_PATH/retroarch/tools/cg2glsl.py" "$OUT_DIR/shaders/shaders_cg" "$OUT_DIR/shaders/shaders_glsl"
     
     # Strip out debug symbols from the shared libraries and main binary
-    strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note "$OUT_DIR/cores/*.so"
-    strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note "$OUT_DIR/bin/retroarch"
+    strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note $OUT_DIR/cores/*.so
+    strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note $OUT_DIR/bin/retroarch
 
     # Zip for distribution
     zip -rq "$OUT_DIR/retroarch-x86_64.zip" "$OUT_DIR"
