@@ -4,7 +4,7 @@
 # retro in a portable Unix way.
 #
 # Requirements:
-# sudo apt-get install nvidia-cg-dev libusb-dev libv4l-dev libopenvg1-mesa libopenal-dev libxml2-dev libudev-dev
+# sudo apt-get install nvidia-cg-dev libusb-dev libv4l-dev libopenvg1-mesa libopenal-dev libxml2-dev libudev-dev libminiupnpc-dev
 #
 
 
@@ -15,8 +15,8 @@ OUT_DIR="$CURR_DIR/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
-export CFLAGS="-O3 -mavx -mavx2 -mfpmath=sse -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-sm -fgcse-las -fivopts -foptimize-register-move -fipa-cp-clone -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves -march=broadwell -mtune=broadwell -fomit-frame-pointer -flto=10 -pipe"
-export CFLAGS="$CFLAGS -fgraphite -fgraphite-identity -floop-block -floop-interchange -floop-nest-optimize -floop-strip-mine"
+export CFLAGS="-O3 -mavx -mavx2 -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-sm -fgcse-las -fivopts -foptimize-register-move -fipa-cp-clone -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves -march=broadwell -mtune=broadwell -fomit-frame-pointer -flto=jobserver -pipe"
+export CFLAGS="$CFLAGS -fgraphite -fgraphite-identity -floop-block -floop-interchange -floop-nest-optimize -floop-strip-mine -ftree-loop-linear"
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="$CFLAGS"
 export ASFLAGS="$CFLAGS"
@@ -46,13 +46,19 @@ function build_retroarch()
     make -j40 clean
     # x86_64 optimizations
     #./configure --help || exit 0
-    ./configure --enable-sse --enable-opengl --enable-vulkan --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-libretrodb || exit -127
+    ./configure --enable-sse --enable-opengl --enable-vulkan --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-update_assets || exit -127
     time make -f Makefile -j10 || exit -99
     make DESTDIR="$OUT_DIR/tmp" install
     cd ..
 }
 
-function build_libretro()
+function build_libretro_select()
+{
+    cores="snes9_next mupen64plus reicast"
+    exit 0
+}
+
+function build_libretro_all()
 {
     "$LIBRETRO_PATH/libretro-build.sh"
 }
@@ -62,7 +68,7 @@ function install_libretro()
     "$LIBRETRO_PATH/libretro-install.sh" "$OUT_DIR"
 
     # Organize our files in a portable structure
-    mkdir -p "$OUT_DIR/bin" "$OUT_DIR/cores-info" "$OUT_DIR/cores-info" "$OUT_DIR/cores" "$OUT_DIR/shaders" "$OUT_DIR/lib" "$OUT_DIR/autoconfig/" "$OUT_DIR/downloads/" "$OUT_DIR/system/" "$OUT_DIR/screenshots/" "$OUT_DIR/assets/" "$OUT_DIR/overlays/" "$OUT_DIR/saves/" "$OUT_DIR/roms/" "$OUT_DIR/remap/" "$OUT_DIR/database/"
+    mkdir -p "$OUT_DIR/bin" "$OUT_DIR/cores-info" "$OUT_DIR/cores-info" "$OUT_DIR/cores" "$OUT_DIR/shaders" "$OUT_DIR/lib" "$OUT_DIR/autoconfig/" "$OUT_DIR/downloads/" "$OUT_DIR/system/" "$OUT_DIR/screenshots/" "$OUT_DIR/assets/" "$OUT_DIR/overlays/" "$OUT_DIR/saves/" "$OUT_DIR/roms/" "$OUT_DIR/remap/" "$OUT_DIR/database/" "$OUT_DIR/thumbnails/" "$OUT_DIR/playlists"
     cp -av "$OUT_DIR/tmp/usr/local/bin/." "$OUT_DIR/bin"
     cp -av "$OUT_DIR/tmp/etc/." "$OUT_DIR/config"
     cp -av "$OUT_DIR/tmp/usr/local/share/retroarch/assets/." "$OUT_DIR/assets"
@@ -99,7 +105,7 @@ function extras_libretro()
 # The main sequence of steps now go here ...
 prerequisites
 build_retroarch
-build_libretro
+#build_libretro_all
 install_libretro
 extras_libretro
 sync
