@@ -4,7 +4,7 @@
 # retro in a portable Unix way.
 #
 # Requirements:
-# sudo apt-get install linux-libc-dev mesa-common-dev nvidia-cg-dev libusb-dev libv4l-dev libgl1-mesa-dev libegl1-mesa libopenvg1-mesa-dev libopenal-dev libxml2-dev libudev-dev libminiupnpc-dev
+# sudo apt-get install linux-libc-dev:armhf install mesa-common-dev:armhf nvidia-cg-dev:armhf libusb-dev:armhf libv4l-dev:armhf libgl1-mesa-dev:armhf libegl1-mesa-dev:armhf libgles2-mesa:armhf libgles2-mesa-dev:armhf libopenvg1-mesa:armhf libopenal-dev:armhf libxml2-dev:armhf libudev-dev:armhf
 #
 
 
@@ -15,14 +15,20 @@ OUT_DIR="${CURR_DIR}/retroarch/"
 
 export LIBRETRO_DEVELOPER=0
 export DEBUG=0
-export CFLAGS="-O3 -mavx -mavx2 -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-sm -fgcse-las -fivopts -foptimize-register-move -fipa-cp-clone -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves -fomit-frame-pointer -flto=jobserver -pipe"
+#export CFLAGS="-O3 -mfpu=neon-fp-armv8 -mfloat-abi=hard -mvectorize-with-neon-quad -ftree-vectorize -ftree-slp-vectorize -fvect-cost-model -ftree-partial-pre -frename-registers -fweb -fgcse -fgcse-sm -fgcse-las -fivopts -foptimize-register-move -fipa-cp-clone -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves -fomit-frame-pointer"
 #export CFLAGS="${CFLAGS} -fgraphite -fgraphite-identity -floop-block -floop-interchange -floop-nest-optimize -floop-strip-mine -ftree-loop-linear"
-export CFLAGS="${CFLAGS} -march=broadwell -mtune=broadwell"
-export CFLAGS="${CFLAGS}"
-export CXXFLAGS="${CFLAGS}"
-export ASFLAGS="${CFLAGS}"
-export LDFLAGS="${LDFLAGS} -Wl,-O1 -Wl,-flto -Wl,--hash-style=gnu -Wl,--as-needed"
+#export CFLAGS="${CFLAGS} -marm -mcpu=cortex-a53"
+#export CFLAGS="${CFLAGS}"
+#export CXXFLAGS="${CFLAGS}"
+#export ASFLAGS="${CFLAGS}"
+export LDFLAGS="${LDFLAGS} -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed"
 
+export CROSS_COMPILE="/usr/bin/arm-linux-gnueabihf-"
+export CC="${CROSS_COMPILE}gcc"
+export CXX="${CROSS_COMPILE}g++"
+export AS="${CROSS_COMPILE}as"
+export AR="${CROSS_COMPILE}ar"
+export LINK="${CROSS_COMPILE}ld"
 
 function prerequisites()
 {
@@ -43,9 +49,9 @@ function build_retroarch()
     # Build retroarch
     cd "${LIBRETRO_PATH}/retroarch"
     make -j40 clean
-    # x86_64 optimizations
+    # ARM optimizations
     #./configure --help || exit 0
-    ./configure --enable-sse --enable-opengl --enable-vulkan --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-update_assets || exit -127
+    ./configure --enable-neon --enable-opengl --enable-vulkan --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-update_assets --disable-miniupnpc || exit -127
     time make -f Makefile -j16 || exit -99
     make DESTDIR="${OUT_DIR}/tmp" install
     cd ..
@@ -68,7 +74,7 @@ function build_libretro_select()
         cd "${LIBRETRO_PATH}/libretro-${elem}"
         # Update and reset the core
         git gc && git clean -dfx && git reset --hard && git pull
-        make -f Makefile -j40 clean && make -f Makefile -j16 || exit -79
+        make -f Makefile -j40 clean && make -f Makefile platform="rpi3" HAVE_OPENGL=0 HAVE_OPENGLES=0 FORCE_GLES=1 || exit -79
         # Copy it over the build dir
         find . -name "*.so" -exec mv -vf \{\} "${OUT_DIR}/tmp/" 2> /dev/null \;
         cd ..
@@ -116,13 +122,13 @@ function extras_libretro()
     strip --strip-debug --strip-unneeded --remove-section=.comment --remove-section=.note ${OUT_DIR}/bin/retroarch
 
     # Zip for distribution
-    zip -rq "${OUT_DIR}/retroarch-x86_64.zip" "${OUT_DIR}"
+    zip -rq "${OUT_DIR}/retroarch-rpi3.zip" "${OUT_DIR}"
 }
 
 
 # The main sequence of steps now go here ...
 prerequisites
-build_retroarch
+#build_retroarch
 ##build_libretro_all
 build_libretro_select
 install_libretro
