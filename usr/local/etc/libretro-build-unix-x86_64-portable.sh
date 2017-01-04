@@ -45,7 +45,7 @@ function build_retroarch()
     make -j40 clean
     # x86_64 optimizations
     #./configure --help || exit 0
-    ./configure --enable-sse --enable-opengl --enable-vulkan --enable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-update_assets || exit -127
+    ./configure --enable-sse --enable-opengl --enable-vulkan --disable-cg --disable-v4l2 --enable-libxml2 --disable-ffmpeg --disable-sdl2 --disable-sdl --disable-kms --disable-cheevos --disable-imageviewer --disable-parport --disable-langextra --disable-update_assets || exit -127
     time make -f Makefile -j16 || exit -99
     make DESTDIR="${OUT_DIR}/tmp" install
     cd ..
@@ -55,24 +55,31 @@ function build_libretro_select()
 {
     cores=("snes9x2010"
            "mupen64plus"
+           "mgba"
+           "ppsspp"
+           "nestopia"
+           "mednafen_psx"
            "reicast"
            "mame2014"
-           "mgba"
-           "nestopia"
-           "ppsspp"
-           "mednafen_psx"
     )
+
+    # Remove LTO from cores, not working well yet
+    export CFLAGS="${CFLAGS} -fno-lto"
+    export CFLAGS="${CFLAGS}"
+    export CXXFLAGS="${CFLAGS}"
+    export ASFLAGS="${CFLAGS}"
+    export LDFLAGS="${LDFLAGS} -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed"
 
     for elem in "${cores[@]}"
       do
         cd "${LIBRETRO_PATH}/libretro-${elem}"
         # Update and reset the core
         git gc && git clean -dfx && git reset --hard && git pull
-        make -f Makefile -j40 clean && make -f Makefile -j16 || exit -79
+        make -j40 clean && make -j16 || continue
         # Copy it over the build dir
         find . -name "*.so" -exec mv -vf \{\} "${OUT_DIR}/tmp/" 2> /dev/null \;
-        cd ..
       done
+      cd ..
 }
 
 function build_libretro_all()
