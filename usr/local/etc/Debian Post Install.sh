@@ -7,16 +7,19 @@ deb http://dl.google.com/linux/musicmanager/deb/ stable main" | sudo tee /etc/ap
 
 # sudo vim /etc/apt/sources.list
 #
-# deb http://ftp.us.debian.org/debian/ testing main contrib non-free
-# deb-src http://ftp.us.debian.org/debian/ testing main contrib non-free
 #
-# deb http://security.debian.org/ testing/updates main
-# deb-src http://security.debian.org/ testing/updates main
 #
-# deb http://ftp.us.debian.org/debian/ testing-updates main
-# deb-src http://ftp.us.debian.org/debian/ testing-updates main
-#
+# deb http://deb.debian.org/debian/ testing main contrib non-free
+# deb-src http://deb.debian.org/debian/ testing main contrib non-free
+# 
+# deb http://deb.debian.org/debian-security testing/updates main contrib non-free
+# deb-src http://deb.debian.org/debian-security testing/updates main contrib non-free
+# 
+# deb http://deb.debian.org/debian/ testing-updates main contrib non-free
+# deb-src http://deb.debian.org/debian/ testing-updates main contrib non-free
+# 
 # deb http://www.deb-multimedia.org testing main non-free
+
 
 # Minimal Gnome
 sudo apt-get purge gnome-games rhythmbox* empathy* ekiga* gnome-ppp tomboy mutt ppp sound-juicer simple-scan xboard quadrapassel four-in-a-row swell-foop lightsoff tali iagno reportbug shotwell && sudo apt-get install gnome-core && sudo apt-get autoremove
