@@ -11,33 +11,19 @@
 #
 # By default this script does nothing.
 
-# Enable PCIe MMRBC to 4k reads to our network controller
-NET_BDF=$(grep r8169 /proc/bus/pci/devices | cut -c1-4)
-NET_BUS=$(echo $NET_BDF | cut -c1-2)
-NET_DEV=$(echo $NET_BDF | cut -c3-4)
-setpci -v -s ${NET_BUS}:${NET_DEV} e6.b=2e
-
-# NIC Card optimizations
-ethtool -K eth0 tx off rx off tso off gso off
-ethtool -G eth0 rx 4096 tx 4096
-
-# Jumbo frames enabled
-ifconfig eth0 mtu 9000
-
 # CPU Governor change
 cpufreq-set -g schedutil
 
 # Enabling Kernel Same-page Sharing
 echo 2048 > /sys/kernel/mm/ksm/pages_to_scan
 echo 8000 > /sys/kernel/mm/ksm/sleep_millisecs
-#echo    1 > /sys/kernel/mm/ksm/deferred_timer
 echo    1 > /sys/kernel/mm/ksm/run
 
 # Enabling Transparent Hugepage Support
 echo always > /sys/kernel/mm/transparent_hugepage/enabled
 
-# Using 20% as zRAM now, this machine has a powerful CPU
-ZRAM_FACTOR=20
+# Using 80% as zRAM now, this machine has a powerful CPU
+ZRAM_FACTOR=80
 MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
 CPU_NUM=$(grep -c processor /proc/cpuinfo)
 
@@ -51,15 +37,26 @@ done
 
 # Custom power management settings from PowerTop
 echo 0 > /proc/sys/kernel/nmi_watchdog
-echo auto > /sys/bus/i2c/devices/*/device/power/control
-echo auto > /sys/bus/pci/devices/*/power/control
-echo auto > /sys/bus/usb/devices/usb*/power/control
-echo min_power > /sys/class/scsi_host/*/link_power_management_policy
+echo auto | tee /sys/bus/i2c/devices/i2c-*/device/power/control
+echo auto | tee /sys/bus/pci/devices/*/power/control
+echo auto | tee /sys/bus/usb/devices/usb*/power/control
+echo min_power | tee /sys/class/scsi_host/*/link_power_management_policy
 
 # Custom devices for this computer
 echo auto > /sys/bus/usb/devices/4-1/power/control
+echo auto > /sys/bus/usb/devices/1-5/power/control
 echo 1 > /sys/module/snd_hda_intel/parameters/power_save
 
+# Enable PCIe MMRBC to 4k reads to our network controller
+NET_BDF=$(grep r8169 /proc/bus/pci/devices | cut -c1-4)
+NET_BUS=$(echo $NET_BDF | cut -c1-2)
+NET_DEV=$(echo $NET_BDF | cut -c3-4)
+setpci -v -s ${NET_BUS}:${NET_DEV} e6.b=2e
+
+# Jumbo frames enabled
+ifconfig eth0 mtu 9000
+
 echo "rc.local completed"
+
 exit 0
 
