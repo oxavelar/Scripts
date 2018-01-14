@@ -43,9 +43,12 @@ echo auto | tee /sys/bus/usb/devices/usb*/power/control
 echo min_power | tee /sys/class/scsi_host/*/link_power_management_policy
 
 # Custom devices for this computer
-echo auto > /sys/bus/usb/devices/4-1/power/control
-echo auto > /sys/bus/usb/devices/1-5/power/control
 echo 1 > /sys/module/snd_hda_intel/parameters/power_save
+echo auto > /sys/bus/usb/devices/1-5/power/control
+echo auto > /sys/bus/usb/devices/3-5/power/control 
+echo auto > /sys/bus/usb/devices/4-1/power/control # USB3-SATA-U3
+
+echo 1500 > /proc/sys/vm/dirty_writeback_centisecs
 
 # Enable PCIe MMRBC to 4k reads to our network controller
 NET_BDF=$(grep r8169 /proc/bus/pci/devices | cut -c1-4)
@@ -55,6 +58,9 @@ setpci -v -s ${NET_BUS}:${NET_DEV} e6.b=2e
 
 # Jumbo frames enabled
 ifconfig eth0 mtu 9000
+
+# Wake-on-lan status
+ethtool -s eth0 wol d
 
 echo "rc.local completed"
 
