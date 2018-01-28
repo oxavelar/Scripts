@@ -22,18 +22,16 @@ echo    1 > /sys/kernel/mm/ksm/run
 # Enabling Transparent Hugepage Support
 echo always > /sys/kernel/mm/transparent_hugepage/enabled
 
-# Using 80% as zRAM now, this machine has a powerful CPU
-ZRAM_FACTOR=80
-MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
-CPU_NUM=$(grep -c processor /proc/cpuinfo)
-
-modprobe zram num_devices=$CPU_NUM
-for i in $(seq 0 $((CPU_NUM - 1)));
-do
-  echo $((ZRAM_FACTOR * MEM_SIZE_KB * 1024 / CPU_NUM / 100)) > /sys/block/zram$i/disksize
-  mkswap /dev/zram$i
-  swapon -p 5 /dev/zram$i
-done
+if modprobe zram
+then
+  # Using 20% as zRAM now, this machine has a powerful CPU
+  ZRAM_FACTOR=20
+  MEM_SIZE_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
+  
+  echo $((ZRAM_FACTOR * MEM_SIZE_KB * 1024 / 100)) > /sys/block/zram0/disksize
+  mkswap /dev/zram0
+  swapon -p 5 /dev/zram0
+fi
 
 # Custom power management settings from PowerTop
 echo 0 > /proc/sys/kernel/nmi_watchdog
@@ -44,9 +42,9 @@ echo min_power | tee /sys/class/scsi_host/*/link_power_management_policy
 
 # Custom devices for this computer
 echo 1 > /sys/module/snd_hda_intel/parameters/power_save
-echo auto > /sys/bus/usb/devices/1-5/power/control
+echo auto > /sys/bus/usb/devices/1-5/power/control # USB-SATA-U3
 echo auto > /sys/bus/usb/devices/3-5/power/control 
-echo auto > /sys/bus/usb/devices/4-1/power/control # USB3-SATA-U3
+echo auto > /sys/bus/usb/devices/4-1/power/control # USB Keyboard
 
 echo 1500 > /proc/sys/vm/dirty_writeback_centisecs
 
@@ -60,7 +58,7 @@ setpci -v -s ${NET_BUS}:${NET_DEV} e6.b=2e
 ifconfig eth0 mtu 9000
 
 # Wake-on-lan status
-ethtool -s eth0 wol d
+ethtool -s eth0 wol 
 
 echo "rc.local completed"
 
